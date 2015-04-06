@@ -1,8 +1,8 @@
 def test(str)
   vowel_hash = Hash.new(0)
   vowels = ["a", "e", "i", "o", "u"]
-  str.downcase.each_char do |boobs|
-    vowel_hash[boobs] += 1 if vowels.include?(boobs)
+  str.downcase.each_char do |char|
+    vowel_hash[char] += 1 if vowels.include?(char)
   end
   vowel_hash.sort
 end
