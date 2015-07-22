@@ -14,4 +14,4 @@ def fizzbuzz(num1, num2)
   end
 end
 
-fizzbuzz(2,100)
+fizzbuzz(1,100)
