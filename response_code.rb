@@ -12,7 +12,7 @@ def get_ip(ip_address)
 end
 
 begin
-con = Mysql.new 'localhost', '127.0.0.1', '', 'test'
+con = Mysql.new '127.0.0.1', 'root', '', 'test'
 rs = con.query "SELECT links FROM urls"
 i = 0
 
@@ -33,6 +33,7 @@ rs.each do |link|
     con.query "UPDATE urls SET ip_address = NULL, response_code = #{res.code}, link_status = 'n/a' WHERE id = #{i}"
     puts "ip_address = NULL\nresponse_code = #{res.code}\nlink_status = 'n/a'\n\n"
   else
+    puts url
     con.query "UPDATE urls SET ip_address = NULL, response_code = NULL, link_status = 'n/a' WHERE id = #{i}"
     puts "ip_address = NULL\nresponse_code = NULL\nlink_status = n/a\n\n"
   end

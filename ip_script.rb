@@ -26,10 +26,8 @@ begin
       puts "row#{i} updatd: ip_address = #{ip_string}"
     else
      puts "row#{i} failed to update."
-   end
-
+    end
   end
-
 
 rescue Mysql::Error => err
   puts err.errno
