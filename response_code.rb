@@ -1,15 +1,17 @@
 require 'mysql'
 require 'net/http'
-require 'Resolv'
+# require 'Resolv'
 
 
-def get_ip(ip_address)
-  begin
-    @ip = Resolv.getaddress(ip_address.sub(/^https?\:\/\//,''))
-  rescue Resolv::ResolvError => e
-    puts e
-  end
-end
+# def get_ip(ip_address)
+#   begin
+#
+#     @ip = Resolv.getaddress(ip_address.sub(/^https?\:\/\//,''))
+#
+#   rescue Resolv::ResolvError => e
+#     puts e
+#   end
+# end
 
 begin
 con = Mysql.new '127.0.0.1', 'root', '', 'test'
@@ -24,25 +26,25 @@ rs.each do |link|
 
   puts url.insert(0, "http://") unless(url.match(/^http:\/\//))
   puts res = Net::HTTP.get_response(URI.parse(url))
-  get_ip(link.join(""))
+  # get_ip(link.join(""))
 
   if res.code.match(/(2|3)\d{2}/)
-    con.query "UPDATE urls SET ip_address = '#{@ip}', response_code = #{res.code}, link_status = 'good' WHERE id = #{i}"
-    puts "ip_address = #{@ip}\nresponse_code = #{res.code}\nlink_status = good\n\n"
+    con.query "UPDATE urls SET response_code = #{res.code}, link_status = 'good' WHERE id = #{i}"
+    puts "response_code = #{res.code}\nlink_status = good\n\n"
   elsif res.code.match(/(1|4|5|6)\d{2}/)
-    con.query "UPDATE urls SET ip_address = NULL, response_code = #{res.code}, link_status = 'n/a' WHERE id = #{i}"
-    puts "ip_address = NULL\nresponse_code = #{res.code}\nlink_status = 'n/a'\n\n"
+    con.query "UPDATE urls SET response_code = #{res.code}, link_status = 'n/a' WHERE id = #{i}"
+    puts "response_code = #{res.code}\nlink_status = 'n/a'\n\n"
   else
     puts url
-    con.query "UPDATE urls SET ip_address = NULL, response_code = NULL, link_status = 'n/a' WHERE id = #{i}"
-    puts "ip_address = NULL\nresponse_code = NULL\nlink_status = n/a\n\n"
+    con.query "UPDATE urls SET response_code = NULL, link_status = 'n/a' WHERE id = #{i}"
+    puts "response_code = NULL\nlink_status = n/a\n\n"
   end
 
   rescue SocketError => e
     puts url
     puts e
-    con.query "UPDATE urls SET ip_address = NULL, response_code = NULL, link_status = 'n/a' WHERE id = #{i}"
-    puts "ip_address = NULL\nresponse_code = NULL\nlink_status = n/a\n\n"
+    con.query "UPDATE urls SET response_code = NULL, link_status = 'n/a' WHERE id = #{i}"
+    puts "response_code = NULL\nlink_status = n/a\n\n"
   end
 
 end
